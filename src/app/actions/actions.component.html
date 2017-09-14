@@ -1,0 +1,59 @@
+<div class="page-header">
+  <h2>Actions</h2>
+</div>
+
+<div class="row">
+  <button class="btn btn-primary" (click)="addAction()">Add action</button>
+</div>
+
+<div class="row">
+  <div class="table-responsive">
+    <div class="table" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Origin</th>
+          <th>Target</th>
+          <th>ActionType</th>
+          <th>Team</th>
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let action of actions">
+          <td>
+            {{ action._id }}
+          </td>
+          <td>
+            <select class="form-control" [(ngModel)]="action.origin">
+              <option *ngFor="let cell of cells" value="{{ cell._id }}">{{ cell.name }}</option>
+            </select>
+          </td>
+          <td>
+            <select class="form-control" [(ngModel)]="action.target">
+              <option *ngFor="let cell of cells" value="{{ cell._id }}">{{ cell.name }}</option>
+            </select>
+          </td>
+          <td>
+            <select class="form-control" [(ngModel)]="action.actionType">
+              <option value="attack">Attack</option>
+              <option value="defend">Defend</option>
+            </select>
+          </td>
+          <td>
+            <select class="form-control" [(ngModel)]="action.team">
+              <option *ngFor="let team of teams" value="{{ team._id }}">{{ team.name }}</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-primary" (click)="updateAction(action)">Update</button>
+          </td>
+          <td>
+            <button class="btn btn-default" (click)="deleteAction(action)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </div>
+  </div>
+</div>

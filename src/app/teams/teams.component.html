@@ -1,0 +1,40 @@
+<div class="page-header">
+  <h2>Teams</h2>
+</div>
+
+<div class="row">
+  <button class="btn btn-primary" (click)="addTeam()">Add team</button>
+</div>
+
+<div class="row">
+  <div class="table" >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Color</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let team of teams">
+        <td>
+          <p>{{ team._id }}</p>
+        </td>
+        <td>
+          <input type="text" class="form-control" name="name" [(ngModel)]="team.name" />
+        </td>
+        <td>
+          <input type="text" class="form-control" name="color" [(ngModel)]="team.color" />
+        </td>
+        <td>
+          <button class="btn btn-primary" (click)="updateTeam(team)">Update</button>
+        </td>
+        <td>
+          <button class="btn btn-default" (click)="deleteTeam(team)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </div>
+</div>

@@ -1,21 +1,40 @@
-var gameport = process.env.PORT || 80;
+// Get dependencies
+const express = require('express');
+const path = require('path');
+const http = require('http');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-var Express = require('express');
-var app = Express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var BetrayalGame = require('./includes/betrayalGame');
+// Get API routes
+const api = require('./server/routes/api');
 
-var betrayalGame = new BetrayalGame();
+//Connect to database
+mongoose.Promise = require('bluebird');
+mongoose.connect('mongodb://localhost/projectBetrayal', { useMongoClient: true });
 
-//setting up express erver
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/default.html');
+const app = express();
+
+// POST data parsers
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Point static path to dist
+app.use(express.static(path.join(__dirname, 'dist')));
+
+//Setup our api routes
+app.use('/api', api);
+
+// All other routes go to the index file
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'))
 });
 
-io.on('connection', function(client){
-  console.log('User connected');
-});
+// Store Epress port
+const port = process.env.PORT || 3000;
+app.set('port', port);
 
-server.listen(gameport);
-console.log('Express listening on port ' + gameport);
+//Create HTTP server
+const server = http.createServer(app);
+
+//Listen on provided port, on all interfaces
+server.listen(port, () => console.log('Server and API are running on localhost:' + port));
