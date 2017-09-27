@@ -27,6 +27,24 @@ router.route('/')
   });
 });
 
+router.route('/owner/:owner_id')
+// Get all actions according to the cell ownerid
+.get((req, res) => {
+  Action.find()
+    .populate({
+      path: 'origin',
+      $match: { owner: req.params.owner_id },
+      select: 'name neighbours owner',
+      populate: {
+        path: 'neighbours',
+        select: 'name'
+      },
+    }).exec(function(err, actions) {
+      if (err) res.json(err);
+      else res.json(actions);
+    });
+});
+
 router.route('/:action_id')
 /**
  * Get a single action by id

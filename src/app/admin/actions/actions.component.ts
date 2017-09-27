@@ -1,11 +1,11 @@
 import { ConfirmComponent } from './../confirm/confirm.component';
 import { AddActionComponent } from './../add-action/add-action.component';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { CellsService } from './../cells.service';
-import { TeamsService } from './../teams.service';
-import { ActionsService } from './../actions.service';
+import { CellsService } from '../../cells.service';
+import { TeamsService } from '../../teams.service';
+import { ActionsService } from '../../actions.service';
 import { Component, OnInit } from '@angular/core';
-import { MessageComponent} from '../message/message.component';
+import { MessageComponent } from '../../message/message.component';
 
 @Component({
   selector: 'app-actions',

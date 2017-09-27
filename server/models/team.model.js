@@ -10,6 +10,14 @@ var teamSchema = new Schema({
   color: {
     type: String,
     default: 'Blue'
+  },
+  username: {
+    type: String,
+    required: 'Username must be given'
+  },
+  password: {
+    type: String,
+    required: 'Password must be given'
   }
 });
 

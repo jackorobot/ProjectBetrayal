@@ -1,4 +1,3 @@
-import { ActionsService } from './../actions.service';
 import { TeamsService } from './../teams.service';
 import { CellsService } from './../cells.service';
 import { Component, ViewChild, ElementRef, AfterViewInit, Input , OnChanges } from '@angular/core';
@@ -10,38 +9,29 @@ import { Component, ViewChild, ElementRef, AfterViewInit, Input , OnChanges } fr
 })
 
 export class MapViewComponent implements AfterViewInit, OnChanges {
-  public _size: number;
+  public _width: number;
+  public _height: number;
   private canvas: CanvasRenderingContext2D;
 
   private cells: any = [];
   private teams: any = [];
-  private actions: any = [];
 
   @ViewChild('mapView') mapView: ElementRef;
 
   constructor(private el: ElementRef,
     private cellsService: CellsService,
-    private teamsService: TeamsService,
-    private actionsService: ActionsService) {
-      const elementHeight = 500;
-      const elementWidth = 500;
-
-    if (elementHeight > elementWidth) {
-      this._size = elementWidth;
-    } else {
-      this._size = elementHeight;
-    }
+    private teamsService: TeamsService) {
+      this._width = 1280;
+      this._height = 1024;
   }
 
   ngAfterViewInit() {
     this.canvas = this.mapView.nativeElement.getContext('2d');
-    this.canvas.fillStyle = 'blue';
-    this.canvas.fillRect(0, 0, this._size, this._size);
 
     this.updateCanvas();
     setInterval(() => {
       this.updateCanvas();
-    }, 5000);
+    }, 1000);
   }
 
   ngOnChanges() {
@@ -55,12 +45,8 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
       this.teams = teams;
     });
 
-    this.cellsService.getAllCells().subscribe(cells => {
+    this.cellsService.getAllCellsPopulated().subscribe(cells => {
       this.cells = cells;
-    });
-
-    this.actionsService.getAllActions().subscribe(actions => {
-      this.actions = actions;
     });
   }
 
@@ -70,6 +56,35 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
   }
 
   drawCanvas() {
+    const scaleX = this._width / 1000;
+    const scaleY = this._height / 1000;
 
+    this.canvas.scale(1, 1);
+    this.canvas.lineWidth = 1;
+    this.canvas.textAlign = 'center';
+
+    this.cells.forEach(cell => {
+      // Draw the cell
+      this.canvas.beginPath();
+      cell.corners.forEach((corner, i) => {
+        if (i > 0) {
+          this.canvas.lineTo(scaleX * corner.x, scaleY * corner.y);
+        } else {
+          this.canvas.moveTo(scaleX * corner.x, scaleY * corner.y);
+        }
+      });
+      this.canvas.closePath();
+
+      // Color the cell
+      this.canvas.fillStyle = cell.owner.color;
+      this.canvas.fill();
+      this.canvas.strokeStyle = 'black';
+      this.canvas.stroke();
+
+      // Add text
+      this.canvas.font = '24px sans-serif';
+      this.canvas.fillStyle = 'white';
+      this.canvas.fillText(cell.name + ' (' + cell.owner.name + ')', scaleX * cell.center.x, scaleY * cell.center.y);
+    });
   }
 }

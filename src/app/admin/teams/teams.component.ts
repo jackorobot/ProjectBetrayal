@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TeamsService } from '../teams.service';
+import { TeamsService } from '../../teams.service';
 import { ConfirmComponent } from '../confirm/confirm.component';
-import { MessageComponent } from './../message/message.component';
+import { MessageComponent } from '../../message/message.component';
 import { AddTeamComponent } from './../add-team/add-team.component';
 import { DialogService } from 'ng2-bootstrap-modal';
 
@@ -28,7 +28,7 @@ export class TeamsComponent implements OnInit {
   addTeam() {
     const addTeamPopup = this.dialogService.addDialog(AddTeamComponent, {})
     .subscribe(answer => {
-      if (answer.name !== '' && answer.color !== '') {
+      if (answer.name !== '' && answer.color !== '' && answer.username !== '' && answer.password !== '') {
         this.teamsService.addTeam(answer).subscribe(resp => {
           if (resp.message) {
             // Popup with message

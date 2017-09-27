@@ -1,9 +1,9 @@
 import { AddCellComponent } from './../add-cell/add-cell.component';
-import { MessageComponent } from './../message/message.component';
+import { MessageComponent } from '../../message/message.component';
 import { ConfirmComponent } from './../confirm/confirm.component';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { TeamsService } from './../teams.service';
-import { CellsService } from './../cells.service';
+import { TeamsService } from '../../teams.service';
+import { CellsService } from '../../cells.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -15,7 +15,9 @@ export class CellsComponent implements OnInit {
   cells: any = [];
   teams: any = [];
 
-  constructor(private cellsService: CellsService, private teamsService: TeamsService, private dialogService: DialogService) { }
+  constructor(private cellsService: CellsService,
+    private teamsService: TeamsService,
+    private dialogService: DialogService) { }
 
   ngOnInit() {
     this.teamsService.getAllTeams().subscribe(teams => {

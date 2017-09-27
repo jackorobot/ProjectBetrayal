@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 
 var Cell = require('../models/cell.model');
 
+var ObjectId = mongoose.Types.ObjectId;
+
 router.route('/')
 /**
 * Request all cells
@@ -28,6 +30,28 @@ router.route('/')
   newCell.save(function(err) {
     if (err) res.send(err);
     else res.json({ message: 'Cell added succesfully!'});
+  });
+});
+
+router.route('/populate')
+// Get all cells, but populated
+.get( (req, res) => {
+  Cell.find({}).
+  populate(['owner', 'neighbours'])
+  .exec(function(err, cells){
+    if(err) res.send(err);
+    else res.json(cells);
+  });
+});
+
+router.route('/owner/:owner_id')
+// Get all cells for a given owner
+.get((req, res) => {
+  Cell.find({'owner': new ObjectId(req.params.owner_id)})
+    .populate(['owner', 'neighbours'])
+    .exec(function(err, cells) {
+    if(err) res.send(err);
+    else res.json(cells);
   });
 });
 

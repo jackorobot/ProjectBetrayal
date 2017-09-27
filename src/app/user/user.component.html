@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h1>
+      Themaborrel Hoogverraad
+      <small>Team: {{ team.name }}</small>
+    </h1>
+    <button class="btn btn-primary" (click)="helpBtn()">Help</button>
+    <button class="btn btn-default" (click)="logoutBtn()">Logout</button>
+  </div>
+  <div class="panel panel-default" *ngFor="let cell of teamCells">
+    <div class="panel-heading">
+      <h3 class="panel-title">Cell {{ cell.name }}</h3>
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">Target</span>
+          <select class="form-control" aria-describedby="basic-addon1" ([ngModel])="cell.target">
+            <option value="{{ cell._id }}">Cell {{ cell.name }}</option>
+            <option *ngFor="let neighbour of cell.neighbours" value="{{ neighbour._id }}">Cell {{ neighbour.name }}</option>
+          </select>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon2">Action</span>
+          <select class="form-control" aria-describedby="basic-addon2">
+            <option value="defend" selected>Defend</option>
+            <option value="attack">Attack</option>
+          </select>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">Attack As</span>
+          <select class="form-control" aria-describedby="basic-addon1">
+            <option *ngFor="let team of teams" value="{{ team._id }}">{{ team.name }}</option>
+          </select>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

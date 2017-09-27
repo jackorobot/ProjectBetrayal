@@ -15,6 +15,12 @@ export class ActionsService {
     return this.http.get('/api/actions/' + id)
       .map(res => res.json());
   }
+
+  getActionsByOwner(ownerId) {
+    return this.http.get('/api/actions/owner/' + ownerId)
+      .map(res => res.json());
+  }
+
   addAction(action) {
     return this.http.put('/api/actions', action)
       .map(res => res.json());

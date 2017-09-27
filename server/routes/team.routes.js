@@ -21,10 +21,12 @@ router.route('/')
 
   if (req.body.name) newTeam.name = req.body.name;
   if (req.body.color) newTeam.color = req.body.color;
+  if (req.body.username) newTeam.username = req.body.username;
+  if (req.body.password) newTeam.password = req.body.password;
 
   newTeam.save(function(err) {
     if (err) res.send(err);
-    else res.json({ message: "New team addes succesfully!" });
+    else res.json({ message: "New team added succesfully!" });
   });
 });
 
@@ -47,6 +49,8 @@ router.route('/:team_id')
     
     if (req.body.name) team.name = req.body.name;
     if (req.body.color) team.color = req.body.color;
+    if (req.body.username) team.username = req.body.username;
+    if (req.body.password) team.password = req.body.password;
 
     team.save(function(err){
       if (err) res.send(err);

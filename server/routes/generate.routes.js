@@ -39,8 +39,8 @@ router.route('/')
   
       var voronoi = new Voronoi();
   
-      //Generate random points using 3 passes of lloyd relaxation
-      for (var i =0; i < 3; i++) {
+      //Generate random points using 5 passes of lloyd relaxation
+      for (var i =0; i < 5; i++) {
         var diagram = voronoi.compute(sites, box);
         diagram.cells.forEach(function(cell){
           if (cell.halfedges){
@@ -80,6 +80,7 @@ router.route('/')
       var num = 0;
       countries.forEach(function(country){
         country.owner = teams[num % teams.length]._id;
+        country.team = country.owner;
         num++;
       });
   
@@ -111,12 +112,13 @@ router.route('/')
             }
             if (neighbour && neighbour.country){
               country.neighbours.push(neighbour.country._id);
-              neighbour.country.neighbours.push(country._id);
+              //neighbour.country.neighbours.push(country._id);
             }
           });
         });
         
         countries.forEach(function(country){
+          country.target = country._id;
           country.save(function(err){
             if (err){
               return res.json(err);

@@ -13,6 +13,8 @@
         <th>ID</th>
         <th>Name</th>
         <th>Color</th>
+        <th>Username</th>
+        <th>Password</th>
         <th>Update</th>
         <th>Delete</th>
       </tr>
@@ -27,6 +29,12 @@
         </td>
         <td>
           <input type="text" class="form-control" name="color" [(ngModel)]="team.color" />
+        </td>
+        <td>
+          <input type="text" class="form-control" name="username" [(ngModel)]="team.username" />
+        </td>
+        <td>
+          <input type="text" class="form-control" name="password" [(ngModel)]="team.password" />
         </td>
         <td>
           <button class="btn btn-primary" (click)="updateTeam(team)">Update</button>

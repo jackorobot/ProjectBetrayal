@@ -11,8 +11,18 @@ export class CellsService {
       .map(res => res.json());
   }
 
+  getAllCellsPopulated() {
+    return this.http.get('/api/cells/populate')
+      .map(res => res.json());
+  }
+
   getCell(id) {
     return this.http.get('/api/cells/' + id)
+      .map(res => res.json());
+  }
+
+  getCellsByOwner(ownerId) {
+    return this.http.get('/api/cells/owner/' + ownerId)
       .map(res => res.json());
   }
 

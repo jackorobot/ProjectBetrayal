@@ -23,6 +23,22 @@ var cellSchema = new Schema({
   center: {
     x: Number,
     y: Number
+  },
+  //Action fields
+  target: {
+    type: Schema.ObjectId,
+    ref: 'Cell'
+  },
+  actionType: {
+    type: String,
+    required: 'Action is needed',
+    enum: ['attack', 'defend'],
+    default: 'defend'
+  },
+  team: {
+    type: Schema.ObjectId,
+    ref: 'Team',
+    required: 'Team is needed'
   }
 });
 
