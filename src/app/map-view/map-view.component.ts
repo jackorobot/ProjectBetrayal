@@ -1,6 +1,9 @@
+import { GameService } from './../game.service';
 import { TeamsService } from './../teams.service';
 import { CellsService } from './../cells.service';
 import { Component, ViewChild, ElementRef, AfterViewInit, Input , OnChanges } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-map-view',
@@ -13,6 +16,13 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
   public _height: number;
   private canvas: CanvasRenderingContext2D;
 
+  private $counter: Observable<number>;
+  private subscription: any;
+  private diff: number;
+  private timeStamp = 0;
+  public gameState = 0;
+  public timeDisp = '';
+
   private cells: any = [];
   private teams: any = [];
 
@@ -20,17 +30,29 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
 
   constructor(private el: ElementRef,
     private cellsService: CellsService,
-    private teamsService: TeamsService) {
+    private teamsService: TeamsService,
+    private gameService: GameService) {
       this._width = 1280;
       this._height = 1024;
   }
 
   ngAfterViewInit() {
+    this.$counter = Observable.interval(1000).map((x) => {
+      this.diff = Math.floor(this.timeStamp - new Date().getTime());
+      if (this.diff < 0) {
+        this.diff = 0;
+      }
+      return x;
+    });
+
+    this.subscription = this.$counter.subscribe((x) => this.timeDisp = this.timeString(this.diff));
+
     this.canvas = this.mapView.nativeElement.getContext('2d');
 
     this.updateCanvas();
     setInterval(() => {
       this.updateCanvas();
+      this.updateGameState();
     }, 1000);
   }
 
@@ -38,6 +60,13 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
     if (this.canvas) {
       this.updateCanvas();
     }
+  }
+
+  updateGameState() {
+    this.gameService.getGameState().subscribe(state => {
+      this.gameState = state.gamestate;
+      this.timeStamp = state.timestamp;
+    });
   }
 
   updateList() {
@@ -53,6 +82,21 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
   updateCanvas() {
     this.updateList();
     this.drawCanvas();
+  }
+
+  timeString(millis) {
+    const days = Math.floor(millis / 86400000);
+    millis -= days * 86400000;
+    const hours = Math.floor(millis / 3600000) % 24;
+    millis -= hours * 3600000;
+    const minutes = Math.floor(millis / 60000) % 60;
+    millis -= minutes * 60000;
+    const seconds = Math.floor(millis / 1000) % 1000;
+
+    return [
+      minutes,
+      seconds > 9 ? seconds : '0' + seconds
+    ].join(':');
   }
 
   drawCanvas() {
@@ -86,5 +130,9 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
       this.canvas.fillStyle = 'white';
       this.canvas.fillText(cell.name + ' (' + cell.owner.name + ')', scaleX * cell.center.x, scaleY * cell.center.y);
     });
+    // Add time
+    this.canvas.font = '24px sans-serif';
+    this.canvas.fillStyle = 'white';
+    this.canvas.fillText(this.timeDisp, 32, 24);
   }
 }

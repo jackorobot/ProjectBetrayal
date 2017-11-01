@@ -4,6 +4,7 @@
       Themaborrel Hoogverraad
       <small>Team: {{ team.name }}</small>
     </h1>
+    <button class="btn btn-primary" (click)="getData()">Refresh</button>
     <button class="btn btn-primary" (click)="helpBtn()">Help</button>
     <button class="btn btn-default" (click)="logoutBtn()">Logout</button>
   </div>
@@ -15,26 +16,28 @@
       <li class="list-group-item">
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">Target</span>
-          <select class="form-control" aria-describedby="basic-addon1" ([ngModel])="cell.target">
-            <option value="{{ cell._id }}">Cell {{ cell.name }}</option>
-            <option *ngFor="let neighbour of cell.neighbours" value="{{ neighbour._id }}">Cell {{ neighbour.name }}</option>
+          <select class="form-control" aria-describedby="basic-addon1" [(ngModel)]="cell.target._id" (change)="updateAction(cell)">
+            <option [value]="cell._id">Cell {{ cell.name }}</option>
+            <option *ngFor="let neighbour of cell.neighbours" [value]="neighbour._id">Cell {{ neighbour.name }}</option>
           </select>
         </div>
       </li>
       <li class="list-group-item">
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon2">Action</span>
-          <select class="form-control" aria-describedby="basic-addon2">
-            <option value="defend" selected>Defend</option>
-            <option value="attack">Attack</option>
+          <select class="form-control" aria-describedby="basic-addon2" [attr.disabled]="(cell._id == cell.target._id || cell.owner._id == cell.target.owner) ? true: null" [(ngModel)]="cell.actionType" (change)="updateAction(cell)">
+            <option [value]="'defend'">Defend</option>
+            <option [value]="'attack'">Attack</option>
           </select>
         </div>
       </li>
       <li class="list-group-item">
         <div class="input-group">
-          <span class="input-group-addon" id="basic-addon1">Attack As</span>
-          <select class="form-control" aria-describedby="basic-addon1">
-            <option *ngFor="let team of teams" value="{{ team._id }}">{{ team.name }}</option>
+          <span class="input-group-addon" id="basic-addon1">{{ cell.actionType == 'attack' ? 'Attack' : 'Defend' }} As</span>
+          <select class="form-control" aria-describedby="basic-addon1" [attr.disabled]="cell.actionType == 'defend' ? true : null" [(ngModel)]="cell.team" (change)="updateAction(cell)">
+            <ng-container *ngFor="let team of teams">
+              <option *ngIf="cell.actionType == 'defend' || team._id !== cell.target.owner" [value]="team._id">{{ team.name }}</option>
+            </ng-container>
           </select>
         </div>
       </li>

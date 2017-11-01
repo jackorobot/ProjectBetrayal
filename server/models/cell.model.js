@@ -39,7 +39,8 @@ var cellSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Team',
     required: 'Team is needed'
-  }
+  },
+  armies: Number
 });
 
 var Cell = mongoose.model('Cell', cellSchema);

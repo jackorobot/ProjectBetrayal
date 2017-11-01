@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="page-header">
+    <h2>Game: {{ gameState == 0 ? 'Stopped' : 'Running' }}</h2>
+  </div>
+
+  <div class="row">
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">Milliseconds between rounds</span>
+      <input name="interval" type="number" class="form-control" [(ngModel)]="interval" aria-describedby="basic-addon1">
+      <button class="btn btn-primary" (click)="updateInterval()">Update interval</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <button class="btn btn-primary" (click)="startGame()">Start Game</button>
+    <button class="btn btn-default" (click)="stopGame()">Stop Game</button>
+  </div>
+
+  <div *ngIf="gameState == 1" class="row">
+    <h2>{{ timeDisp }}</h2>
+  </div>
+</div>

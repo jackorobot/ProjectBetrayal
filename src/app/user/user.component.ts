@@ -1,5 +1,7 @@
+import { MessageComponent } from './../message/message.component';
+import { DialogService } from 'ng2-bootstrap-modal';
 import { TeamsService } from './../teams.service';
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CellsService } from './../cells.service';
 
@@ -8,7 +10,7 @@ import { CellsService } from './../cells.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit, OnChanges {
+export class UserComponent implements OnInit {
   teamCells: any = [];
   teamId: string;
   team: any = {};
@@ -16,7 +18,8 @@ export class UserComponent implements OnInit, OnChanges {
   teams: any = [];
   cells: any = [];
 
-  constructor(private cellsService: CellsService,
+  constructor(private dialogService: DialogService,
+    private cellsService: CellsService,
     private teamsService: TeamsService,
     private router: Router) { }
 
@@ -29,12 +32,51 @@ export class UserComponent implements OnInit, OnChanges {
     }
 
     this.getData();
+    setInterval(() => {
+      this.getData();
+    }, 5000);
   }
 
-  ngOnChanges() {
-    if (this.teamId) {
-
+  updateAction(cell) {
+    if (cell._id === cell.target._id) {
+      cell.actionType = 'defend';
+    }else{
+      this.cells.forEach(element => {
+        if (element._id === cell.target._id && element.owner === cell.owner._id) {
+          cell.actionType = 'defend';
+        }
+      });
     }
+
+    if (cell.actionType === 'defend') {
+      this.cells.forEach(element => {
+        if (element._id === cell.target._id) {
+          cell.team = element.owner;
+        }
+      });
+    }else if (cell.actionType === 'attack') {
+      this.cells.forEach(element => {
+        if (element._id === cell.target._id && element.owner === cell.team){
+          cell.team = cell.owner;
+        }
+      });
+    }
+
+    this.cellsService.updateCell(cell).subscribe(resp => {
+      if (resp.errmsg) {
+        // Popup with errmsg
+        const messagePopup = this.dialogService.addDialog(MessageComponent, {
+          title: resp.name,
+          message: resp.errmsg
+        }).subscribe();
+
+        setTimeout( () => {
+          messagePopup.unsubscribe();
+        }, 10000);
+      }
+
+      this.getData();
+    });
   }
 
   getData() {

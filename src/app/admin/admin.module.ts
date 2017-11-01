@@ -16,10 +16,11 @@ import { AddCellComponent } from './add-cell/add-cell.component';
 import { ActionsComponent } from './actions/actions.component';
 import { AddActionComponent } from './add-action/add-action.component';
 import { MapViewComponent } from '../map-view/map-view.component';
+import { GameComponent } from './game/game.component';
 
-import { ActionsService } from './../actions.service';
 import { CellsService } from './../cells.service';
 import { TeamsService } from './../teams.service';
+import { GameService } from '../game.service';
 
 const ROUTES = [
   {
@@ -41,6 +42,10 @@ const ROUTES = [
       {
         path: 'mapview',
         component: MapViewComponent
+      },
+      {
+        path: 'game',
+        component: GameComponent
       }
     ]
   }
@@ -64,7 +69,8 @@ const ROUTES = [
     TagItemsComponent,
     AddCellComponent,
     ActionsComponent,
-    AddActionComponent
+    AddActionComponent,
+    GameComponent
   ],
   entryComponents: [
     TeamsComponent,
@@ -80,7 +86,7 @@ const ROUTES = [
   providers: [
     TeamsService,
     CellsService,
-    ActionsService
+    GameService
   ],
   bootstrap: [AdminComponent]
 })

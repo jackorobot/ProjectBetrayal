@@ -8,6 +8,7 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 
 import { TeamsService } from './teams.service';
 import { CellsService } from './cells.service';
+import { GameService } from './game.service';
 
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
@@ -45,7 +46,8 @@ const ROUTES = [
   entryComponents: [MapViewComponent],
   providers: [
     TeamsService,
-    CellsService
+    CellsService,
+    GameService
   ],
   bootstrap: [AppComponent]
 })

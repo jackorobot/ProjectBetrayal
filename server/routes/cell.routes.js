@@ -26,6 +26,9 @@ router.route('/')
   if (req.body.name) newCell.name = req.body.name;
   if (req.body.owner) newCell.owner = req.body.owner;
   if (req.body.neighbours) newCell.neighbours = req.body.neighbours;
+  if (req.body.target) newCell.target = req.body.target;
+  if (req.body.actionType) newCell.actionType = req.body.actionType;
+  if (req.body.team) newCell.team = req.body.team;
 
   newCell.save(function(err) {
     if (err) res.send(err);
@@ -48,7 +51,7 @@ router.route('/owner/:owner_id')
 // Get all cells for a given owner
 .get((req, res) => {
   Cell.find({'owner': new ObjectId(req.params.owner_id)})
-    .populate(['owner', 'neighbours'])
+    .populate(['owner', 'neighbours', 'target'])
     .exec(function(err, cells) {
     if(err) res.send(err);
     else res.json(cells);
@@ -75,6 +78,9 @@ router.route('/:cell_id')
     if (req.body.name) cell.name = req.body.name;
     if (req.body.owner) cell.owner = req.body.owner;
     if (req.body.neighbours) cell.neighbours = req.body.neighbours;
+    if (req.body.target) cell.target = req.body.target;
+    if (req.body.actionType) cell.actionType = req.body.actionType;
+    if (req.body.team) cell.team = req.body.team;
 
     cell.save(function(err){
       if (err) res.send(err);
