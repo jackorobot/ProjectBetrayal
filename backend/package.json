@@ -1,0 +1,17 @@
+{
+  "name": "project-betrayal",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "node server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "bluebird": "3.5.0",
+    "body-parser": "1.17.2",
+    "express": "4.15.3",
+    "mongoose": "4.11.5",
+    "q": "1.5.1"
+  }
+}

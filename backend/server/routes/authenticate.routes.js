@@ -18,6 +18,10 @@ router.route('/')
     .catch(function (err){
       res.status(400).send(err);
     })
+})
+
+.get((req, res) => {
+  res.json({message: "Nothing here"});
 });
 
 module.exports = router;

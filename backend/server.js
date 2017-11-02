@@ -10,13 +10,20 @@ const api = require('./server/routes/api');
 
 //Connect to database
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://localhost/projectBetrayal', { useMongoClient: true });
+mongoose.connect('mongodb://database/projectBetrayal', { useMongoClient: true });
 
 const app = express();
 
 // POST data parsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Cross origin middleware
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));

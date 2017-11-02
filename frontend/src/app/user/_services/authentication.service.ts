@@ -9,7 +9,7 @@ export class AuthenticationService {
   constructor(private http: Http) { }
 
   login(username: string, password: string) {
-    return this.http.post('/api/authenticate', { username: username, password: password })
+    return this.http.post('http://localhost:3000/api/authenticate', { username: username, password: password })
       .map((response: Response) => {
         // Login succesful if there is a jwt token in the response
         const user = response.json();
