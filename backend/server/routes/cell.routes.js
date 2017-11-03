@@ -34,6 +34,15 @@ router.route('/')
     if (err) res.send(err);
     else res.json({ message: 'Cell added succesfully!'});
   });
+})
+/**
+ * Delete all cells
+ */
+.delete((req, res) => {
+   Cell.remove({}, function(err, cell){
+    if (err) res.send(err);
+    else res.json({ message: 'Cells deleted'});
+   });
 });
 
 router.route('/populate')

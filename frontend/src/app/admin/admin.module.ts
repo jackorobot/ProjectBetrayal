@@ -24,7 +24,7 @@ import { GameService } from '../game.service';
 
 const ROUTES = [
   {
-    path: 'admin',
+    path: 'supersecretadmin',
     component: AdminComponent,
     children: [
       {

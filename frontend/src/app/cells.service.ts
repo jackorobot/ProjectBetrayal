@@ -7,37 +7,42 @@ export class CellsService {
   constructor(private http: Http) { }
 
   getAllCells() {
-    return this.http.get('http://localhost:3000/api/cells')
+    return this.http.get('/api/cells')
       .map(res => res.json());
   }
 
   getAllCellsPopulated() {
-    return this.http.get('http://localhost:3000/api/cells/populate')
+    return this.http.get('/api/cells/populate')
       .map(res => res.json());
   }
 
   getCell(id) {
-    return this.http.get('http://localhost:3000/api/cells/' + id)
+    return this.http.get('/api/cells/' + id)
       .map(res => res.json());
   }
 
   getCellsByOwner(ownerId) {
-    return this.http.get('http://localhost:3000/api/cells/owner/' + ownerId)
+    return this.http.get('/api/cells/owner/' + ownerId)
       .map(res => res.json());
   }
 
   addCell(cell) {
-    return this.http.put('http://localhost:3000/api/cells', cell)
+    return this.http.put('/api/cells', cell)
       .map(res => res.json());
   }
 
   updateCell(cell) {
-    return this.http.put('http://localhost:3000/api/cells/' + cell._id, cell)
+    return this.http.put('/api/cells/' + cell._id, cell)
       .map(res => res.json());
   }
 
   deleteCell(cell) {
-    return this.http.delete('http://localhost:3000/api/cells/' + cell._id)
+    return this.http.delete('/api/cells/' + cell._id)
+      .map(res => res.json());
+  }
+
+  deleteAllCells() {
+    return this.http.delete('/api/cells')
       .map(res => res.json());
   }
 }

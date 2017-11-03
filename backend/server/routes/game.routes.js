@@ -10,6 +10,7 @@ var Team = require('../models/team.model');
 
 var gameState = 0; // 0 == stop, 1 == go
 var timeStamp = 0;
+var winner = '';
 var interval = 300000;
 var gameTimer;
 
@@ -34,6 +35,7 @@ function gameHandler() {
 function startGame(res) {
   // Start the game by resetting the gamestate
   gameState = 1
+  winner = '';
   async.parallel([generateGame], function(err){
     if (err)
       return res.send(err);
@@ -286,7 +288,7 @@ router.route('/setroundtime')
 router.route('/getstate')
 // Return the gamestate, and timestamp
 .get((req, res) => {
-  res.json({gamestate: gameState, timestamp: timeStamp, interval: interval});
+  res.json({gamestate: gameState, timestamp: timeStamp, interval: interval, winner: winner});
 });
 
 router.route('/stop')
@@ -294,13 +296,19 @@ router.route('/stop')
 .get((req, res) => {
   stopGame();
   res.json({message: 'Game stopped', gamestate: gameState})
-})
+});
 
 router.route('/start')
 // Start the game
 .put((req, res) => {
   setTimer(req.body.interval);
   startGame(res);
-})
+});
+
+router.route('/winner/:id')
+// Declare the winner
+.get((req, res) => {
+  winner = req.params.id;
+});
 
 module.exports = router;

@@ -1,3 +1,5 @@
+import { TeamsService } from './../../teams.service';
+import { CellsService } from './../../cells.service';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../game.service';
@@ -16,8 +18,13 @@ export class GameComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   public timeDisp: String;
   private diff: number;
+  public teams: any;
+  public winner: any;
+  public returnwinner: any;
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService,
+    private cellsService: CellsService,
+    private teamsService: TeamsService) { }
 
   timeString(millis) {
     const days = Math.floor(millis / 86400000);
@@ -37,15 +44,18 @@ export class GameComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.updateGameState();
 
+    this.teamsService.getAllTeams().subscribe(teams => {
+      this.teams = teams;
+    });
+
     this.$counter = Observable.interval(1000).map((x) => {
       this.diff = Math.floor(this.timeStamp - new Date().getTime());
       if (this.diff < 0) {
         this.diff = 0;
       }
 
-      if (this.diff <= 0 && this.gameState) {
-        this.updateGameState();
-      }
+      this.updateGameState();
+
       return x;
     });
 
@@ -69,6 +79,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.interval = state.interval;
       this.gameState = state.gamestate;
       this.timeStamp = state.timestamp;
+      this.returnwinner = state.winner;
     });
   }
   startGame() {
@@ -89,5 +100,15 @@ export class GameComponent implements OnInit, OnDestroy {
         this.gameState = res.gamestate;
       }
     });
+  }
+
+  clearCells() {
+    this.stopGame();
+    this.cellsService.deleteAllCells().subscribe();
+  }
+
+  declareWinner(team) {
+    this.stopGame();
+    this.gameService.setWinner(team).subscribe();
   }
 }

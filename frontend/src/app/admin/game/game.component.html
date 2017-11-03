@@ -14,9 +14,21 @@
   <div class="row">
     <button class="btn btn-primary" (click)="startGame()">Start Game</button>
     <button class="btn btn-default" (click)="stopGame()">Stop Game</button>
+    <button class="btn btn-default" (click)="clearCells()">Clear Cells</button>
+  </div>
+
+  <div class="row">
+      <select class="form-control" id="inputOwner" [(ngModel)]="winner">
+        <option *ngFor="let team of teams" value="{{ team.name }}">{{ team.name }}</option>
+      </select>
+      <button class="btn btn-primary" (click)="declareWinner(winner)">Declare winner</button>
   </div>
 
   <div *ngIf="gameState == 1" class="row">
     <h2>{{ timeDisp }}</h2>
+  </div>
+
+  <div class="row">
+    <h2>{{ returnwinner }}</h2>
   </div>
 </div>

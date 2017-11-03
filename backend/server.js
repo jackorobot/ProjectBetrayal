@@ -10,7 +10,7 @@ const api = require('./server/routes/api');
 
 //Connect to database
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://database/projectBetrayal', { useMongoClient: true });
+mongoose.connect('mongodb://' + (process.env.MONGO_HOST || 'localhost') + '/projectBetrayal', { useMongoClient: true });
 
 const app = express();
 

@@ -21,6 +21,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
   private diff: number;
   private timeStamp = 0;
   public gameState = 0;
+  public winner = '';
   public timeDisp = '';
 
   private cells: any = [];
@@ -66,6 +67,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
     this.gameService.getGameState().subscribe(state => {
       this.gameState = state.gamestate;
       this.timeStamp = state.timestamp;
+      this.winner = state.winner;
     });
   }
 
@@ -107,32 +109,56 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
     this.canvas.lineWidth = 1;
     this.canvas.textAlign = 'center';
 
-    this.cells.forEach(cell => {
-      // Draw the cell
-      this.canvas.beginPath();
-      cell.corners.forEach((corner, i) => {
-        if (i > 0) {
-          this.canvas.lineTo(scaleX * corner.x, scaleY * corner.y);
-        } else {
-          this.canvas.moveTo(scaleX * corner.x, scaleY * corner.y);
-        }
+    if (this.cells.length > 0) {
+      this.cells.forEach(cell => {
+        // Draw the cell
+        this.canvas.beginPath();
+        cell.corners.forEach((corner, i) => {
+          if (i > 0) {
+            this.canvas.lineTo(scaleX * corner.x, scaleY * corner.y);
+          } else {
+            this.canvas.moveTo(scaleX * corner.x, scaleY * corner.y);
+          }
+        });
+        this.canvas.closePath();
+
+        // Color the cell
+        this.canvas.fillStyle = cell.owner.color;
+        this.canvas.fill();
+        this.canvas.strokeStyle = 'black';
+        this.canvas.stroke();
+
+        // Add text
+        this.canvas.font = '24px sans-serif';
+        this.canvas.fillStyle = 'white';
+        this.canvas.strokeStyle = 'black';
+        this.canvas.lineWidth = 1;
+        this.canvas.fillText(cell.name + ' (' + cell.owner.name + ')', scaleX * cell.center.x, scaleY * cell.center.y);
+        this.canvas.strokeText(cell.name + ' (' + cell.owner.name + ')', scaleX * cell.center.x, scaleY * cell.center.y);
       });
-      this.canvas.closePath();
-
-      // Color the cell
-      this.canvas.fillStyle = cell.owner.color;
-      this.canvas.fill();
-      this.canvas.strokeStyle = 'black';
-      this.canvas.stroke();
-
-      // Add text
-      this.canvas.font = '24px sans-serif';
+      if (this.winner) {
+        // Add winner
+        this.canvas.font = '96px sans-serif';
+        this.canvas.fillStyle = 'white';
+        this.canvas.strokeStyle = 'black';
+        this.canvas.lineWidth = 3;
+        this.canvas.fillText('The winner is: ' + this.winner, this._width / 2, this._height / 2);
+        this.canvas.strokeText('The winner is: ' + this.winner, this._width / 2, this._height / 2);
+      } else {
+        // Add time
+        this.canvas.font = '24px sans-serif';
+        this.canvas.fillStyle = 'white';
+        this.canvas.strokeStyle = 'black';
+        this.canvas.lineWidth = 1;
+        this.canvas.fillText(this.timeDisp, 32, 24);
+        this.canvas.strokeText(this.timeDisp, 32, 24);
+      }
+    } else {
       this.canvas.fillStyle = 'white';
-      this.canvas.fillText(cell.name + ' (' + cell.owner.name + ')', scaleX * cell.center.x, scaleY * cell.center.y);
-    });
-    // Add time
-    this.canvas.font = '24px sans-serif';
-    this.canvas.fillStyle = 'white';
-    this.canvas.fillText(this.timeDisp, 32, 24);
+      this.canvas.fillRect(0, 0, this._width, this._height);
+      this.canvas.font = '48px sans-serif';
+      this.canvas.fillStyle = 'black';
+      this.canvas.fillText('Game begins soon™', this._width / 2, this._height / 2);
+    }
   }
 }

@@ -7,6 +7,7 @@ services:
       - "4200:4200"
     links:
       - backend
+    image: registry.gitlab.com/delftschestudentenbond/projectbetrayal/frontend
   
   backend:
     build: backend
@@ -14,6 +15,7 @@ services:
       - "3000:3000"
     links:
       - database
+    image: registry.gitlab.com/delftschestudentenbond/projectbetrayal/backend
 
   database:
     image: mongo
