@@ -213,8 +213,20 @@ function executeRound(res){
     cells.forEach((cell) => {
       // Lose armies when attacking
       incArmy(cell._id, cell.owner, -10);
+
       // Add those armies to other cell
-      incArmy(cell.target, cell.team, 10);
+      // TEST TODO: Make this 10 to 11 when cell.target owner is the same as cell.team
+      let points = 11;
+      
+      cells.forEach((searchcell) => {
+        if (searchcell._id.toString() === cell.target.toString()) {
+          if (searchcell.owner.toString() === cell.team.toString()) {
+            points = 10;
+          }
+        }
+      });
+
+      incArmy(cell.target, cell.team, points);
     });
 
     var calls = [];
