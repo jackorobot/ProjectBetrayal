@@ -98,7 +98,20 @@ export class UserComponent implements OnInit {
   }
 
   helpBtn() {
-    window.alert('NOPE.avi');
+    // Popup with message
+    const messagePopup = this.dialogService.addDialog(MessageComponent, {
+      title: 'Help',
+      message: 'Het doel van dit spel is om de meeste cellen in bezit te hebben.\
+                Dit doe je door zo veel mogelijk cellen over te nemen van je tegenstanders.\
+                Iedere ronde krijgt een cel de kans om een actie uit te voeren.\
+                Elke ronde heeft een cel 20 eenheden voor de eigenaar om mee te beginnen.\
+                Bij elke actie worden er 10 eenheden van de eigenaar gehaald, en verplaatst naar de gekozen target namens het team dat\
+                opgegeven is. Hiermee kan je dus aanvallen of verdedigen namens jezelf of andere teams. Wanneer een team een cell van\
+                zichzelf heeft getarget is het altijd een DEFEND actie, en krijgt deze speler een bonus eenheid erbij.\
+                Dan wordt er dus 10 eenheden weggehaald bij de originele cell, en 11 bij de target cel opgeteld.\
+                Na elke ronde wordt er per cel gekeken welk team de meeste eenheden heeft staan op een bepaalde cel. Bij gelijkspel\
+                blijft de originele eigenaar staan. Dus onthoud dat als je aanvalt met een cel, je daar maar 10 eenheden overhoudt!'
+    }).subscribe();
   }
 
   logoutBtn() {
