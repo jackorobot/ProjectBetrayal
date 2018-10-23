@@ -1,0 +1,12 @@
+<div class="input-group">
+  <select class="form-control input-sm" [(ngModel)]="optionSelected">
+    <option *ngFor="let option of options" value="{{option._id}}">{{option.name}}</option>
+  </select>
+  <span class="input-group-btn">
+    <button class="btn btn-default btn-sm" (click)="addOption()">Add</button>
+  </span>
+</div>
+
+<span *ngFor="let c of checked">
+  <span class="label label-primary"><span role="button" class="glyphicon glyphicon-remove" (click)="deleteChecked(c)"></span> {{ getName(c) }}</span>
+</span>

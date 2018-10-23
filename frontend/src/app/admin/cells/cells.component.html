@@ -1,0 +1,48 @@
+<div class="page-header">
+  <h2>Cells</h2>
+</div>
+
+<div class="row">
+  <button class="btn btn-primary" (click)="addCell()">Add cell</button>
+</div>
+
+<div class="row">
+  <div class="table-responsive">
+    <div class="table" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Owner</th>
+          <th>Neighbours</th>
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cell of cells">
+          <td>
+            {{ cell._id }}
+          </td>
+          <td>
+            <input type="text" class="form-control" name="name" [(ngModel)]="cell.name" />
+          </td>
+          <td>
+            <select class="form-control" [(ngModel)]="cell.owner">
+              <option *ngFor="let team of teams" value="{{ team._id }}">{{ team.name }}</option>
+            </select>
+          </td>
+          <td>
+            <app-tag-items [options]="cells" [checked]="cell.neighbours"></app-tag-items>
+          </td>
+          <td>
+            <button class="btn btn-primary" (click)="updateCell(cell)">Update</button>
+          </td>
+          <td>
+            <button class="btn btn-default" (click)="deleteCell(cell)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" (click)="close()">&times;</button>
+      <h4 class="modal-title">Add a action</h4>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="inputOrigin">Origin</label>
+        <select id="inputOrigin" class="form-control" [(ngModel)]="origin">
+          <option *ngFor="let cell of cells" value="{{ cell._id }}">{{ cell.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="inputTarget">Target</label>
+        <select id="inputTarget" class="form-control" [(ngModel)]="target">
+          <option *ngFor="let cell of cells" value="{{ cell._id }}">{{ cell.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="inputActionType">Action Type</label>
+        <select id="inputActionType" class="form-control" [(ngModel)]="actionType">
+          <option value="attack">Attack</option>
+          <option value="defend">Defend</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="inputTeam">Team</label>
+        <select id="inputTeam" class="form-control" [(ngModel)]="team">
+          <option *ngFor="let team of teams" value="{{ team._id }}">{{ team.name }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="add()">Add</button>
+      <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
+    </div>
+  </div>
+</div>
