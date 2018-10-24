@@ -1,8 +1,8 @@
-FROM node:6
+FROM node:10
 
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json .angular-cli.json ./
+COPY package.json package-lock.json angular.json ./
 
 RUN npm install
 

@@ -4,6 +4,7 @@ import { CellsService } from './../cells.service';
 import { Component, ViewChild, ElementRef, AfterViewInit, Input , OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-map-view',
@@ -16,7 +17,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
   public _height: number;
   private canvas: CanvasRenderingContext2D;
 
-  private $counter: Observable<number>;
+  private counter: Observable<number>;
   private subscription: any;
   private diff: number;
   private timeStamp = 0;
@@ -38,7 +39,8 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    this.$counter = Observable.interval(1000).map((x) => {
+    this.counter = interval(1000);
+    this.counter.map((x) => {
       this.diff = Math.floor(this.timeStamp - new Date().getTime());
       if (this.diff < 0) {
         this.diff = 0;
@@ -46,7 +48,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
       return x;
     });
 
-    this.subscription = this.$counter.subscribe((x) => this.timeDisp = this.timeString(this.diff));
+    this.subscription = this.counter.subscribe((x) => this.timeDisp = this.timeString(this.diff));
 
     this.canvas = this.mapView.nativeElement.getContext('2d');
 

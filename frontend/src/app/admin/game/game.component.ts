@@ -1,5 +1,6 @@
 import { TeamsService } from './../../teams.service';
 import { CellsService } from './../../cells.service';
+import { interval } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../game.service';
@@ -14,7 +15,7 @@ export class GameComponent implements OnInit, OnDestroy {
   public interval = 300000;
   public gameState = 0;
   private timeStamp = 0;
-  private $counter: Observable<number>;
+  private counter: Observable<number>;
   private subscription: Subscription;
   public timeDisp: String;
   private diff: number;
@@ -48,7 +49,9 @@ export class GameComponent implements OnInit, OnDestroy {
       this.teams = teams;
     });
 
-    this.$counter = Observable.interval(1000).map((x) => {
+    this.counter = interval(10000);
+
+    this.counter.map((x) => {
       this.diff = Math.floor(this.timeStamp - new Date().getTime());
       if (this.diff < 0) {
         this.diff = 0;
@@ -59,7 +62,7 @@ export class GameComponent implements OnInit, OnDestroy {
       return x;
     });
 
-    this.subscription = this.$counter.subscribe((x) => this.timeDisp = this.timeString(this.diff));
+    this.subscription = this.counter.subscribe((x) => this.timeDisp = this.timeString(this.diff));
   }
 
   ngOnDestroy() {

@@ -7,15 +7,21 @@ services:
       - "4200:4200"
     links:
       - backend
-    image: registry.gitlab.com/delftschestudentenbond/projectbetrayal/frontend
-  
+    depends_on:
+      - backend
+    image: projectbetrayal/frontend
+
   backend:
     build: backend
     ports:
       - "3000:3000"
     links:
       - database
-    image: registry.gitlab.com/delftschestudentenbond/projectbetrayal/backend
+    depends_on:
+      - database
+    environment:
+      MONGO_HOST: database
+    image: projectbetrayal/backend
 
   database:
     image: mongo
