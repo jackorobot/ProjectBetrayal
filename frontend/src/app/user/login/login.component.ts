@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { DialogService } from 'ng2-bootstrap-modal';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from './../_services/authentication.service';
-
+import { Component, OnInit } from '@angular/core';
 import { MessageComponent } from './../../message/message.component';
+import { SimpleModalService } from 'ngx-simple-modal';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +19,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private dialogService: DialogService) { }
+    private simpleModalService: SimpleModalService) { }
 
   ngOnInit() {
     // Reset login status
@@ -37,12 +35,12 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/user']);
         },
         error => {
-          const messagePopup = this.dialogService.addDialog(MessageComponent, {
+          const messagePopup = this.simpleModalService.addModal(MessageComponent, {
             title: 'Error',
             message: 'Error during login, check your credentials'
           }).subscribe();
 
-          setTimeout( () => {
+          setTimeout(() => {
             messagePopup.unsubscribe();
           }, 10000);
 

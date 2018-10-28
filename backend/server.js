@@ -10,7 +10,7 @@ const api = require('./server/routes/api');
 
 //Connect to database
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://' + (process.env.MONGO_HOST || 'localhost') + '/projectBetrayal', { useMongoClient: true });
+mongoose.connect('mongodb://' + (process.env.MONGO_HOST || 'localhost') + '/projectBetrayal', { useNewUrlParser: true, useCreateIndex: true });
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Cross origin middleware
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();

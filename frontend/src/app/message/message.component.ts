@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
+import { SimpleModalComponent } from 'ngx-simple-modal';
 
 export interface MessageModel {
   title: string;
@@ -11,11 +11,11 @@ export interface MessageModel {
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css']
 })
-export class MessageComponent extends DialogComponent<MessageModel, boolean> implements MessageModel {
+export class MessageComponent extends SimpleModalComponent<MessageModel, boolean> implements MessageModel {
   title: string;
   message: string;
 
-  constructor(dialogService: DialogService) {
-    super(dialogService);
+  constructor() {
+    super();
   }
 }

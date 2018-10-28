@@ -8,7 +8,7 @@ var GameRoutes = require('./game.routes');
 
 //Get API listing
 router.get('/', (req, res) => {
-  res.send('{ message : "API Works" }');
+  res.send('{ "message" : "API Works" }');
 });
 
 router.use('/teams', TeamRoutes);

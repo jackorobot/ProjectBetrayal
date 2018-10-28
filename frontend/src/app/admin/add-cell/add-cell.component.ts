@@ -1,5 +1,5 @@
-import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Component } from '@angular/core';
+import { SimpleModalComponent } from 'ngx-simple-modal';
 
 export interface AddCellModel {
   cells: any;
@@ -13,8 +13,8 @@ export interface AddCellModel {
 })
 
 export class AddCellComponent
-       extends DialogComponent<AddCellModel, {name: string, owner: string, neighbours: any}>
-       implements AddCellModel {
+  extends SimpleModalComponent<AddCellModel, { name: string, owner: string, neighbours: any }>
+  implements AddCellModel {
   name: string;
   owner: string;
   neighbours: any = [];
@@ -22,12 +22,12 @@ export class AddCellComponent
   cells: any;
   teams: any;
 
-  constructor(dialogService: DialogService) {
-    super(dialogService);
+  constructor() {
+    super();
   }
 
   add() {
-    this.result = {name: this.name, owner: this.owner, neighbours: this.neighbours};
+    this.result = { name: this.name, owner: this.owner, neighbours: this.neighbours };
     this.close();
   }
 

@@ -1,10 +1,17 @@
-import { GameService } from './../game.service';
-import { TeamsService } from './../teams.service';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  ViewChild
+  } from '@angular/core';
 import { CellsService } from './../cells.service';
-import { Component, ViewChild, ElementRef, AfterViewInit, Input , OnChanges } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { GameService } from './../game.service';
 import { interval } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { TeamsService } from './../teams.service';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-map-view',
@@ -34,21 +41,20 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
     private cellsService: CellsService,
     private teamsService: TeamsService,
     private gameService: GameService) {
-      this._width = 1280;
-      this._height = 1024;
+    this._width = 1280;
+    this._height = 1024;
   }
 
   ngAfterViewInit() {
-    this.counter = interval(1000);
-    this.counter.map((x) => {
+    this.counter = interval(1000)
+
+    this.subscription = this.counter.subscribe(() => {
       this.diff = Math.floor(this.timeStamp - new Date().getTime());
       if (this.diff < 0) {
         this.diff = 0;
       }
-      return x;
+      this.timeDisp = this.timeString(this.diff);
     });
-
-    this.subscription = this.counter.subscribe((x) => this.timeDisp = this.timeString(this.diff));
 
     this.canvas = this.mapView.nativeElement.getContext('2d');
 
@@ -112,6 +118,9 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
     this.canvas.textAlign = 'center';
 
     if (this.cells.length > 0) {
+
+      this.canvas.clearRect(0, 0, this._width, this._height);
+
       this.cells.forEach(cell => {
         // Draw the cell
         this.canvas.beginPath();
@@ -138,6 +147,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges {
         this.canvas.fillText(cell.name + ' (' + cell.owner.name + ')', scaleX * cell.center.x, scaleY * cell.center.y);
         this.canvas.strokeText(cell.name + ' (' + cell.owner.name + ')', scaleX * cell.center.x, scaleY * cell.center.y);
       });
+
       if (this.winner) {
         // Add winner
         this.canvas.font = '96px sans-serif';

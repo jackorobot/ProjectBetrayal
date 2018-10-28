@@ -1,4 +1,4 @@
-import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
+import { SimpleModalComponent } from "ngx-simple-modal";
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,18 +6,19 @@ import { Component } from '@angular/core';
   templateUrl: './add-team.component.html',
   styleUrls: ['./add-team.component.css']
 })
-export class AddTeamComponent extends DialogComponent<{}, {name: string, color: string, username: string, password: string}> {
+
+export class AddTeamComponent extends SimpleModalComponent<{}, { name: string, color: string, username: string, password: string }> {
   name: string;
   color: string;
   username: string;
   password: string;
 
-  constructor(dialogService: DialogService) {
-    super(dialogService);
+  constructor() {
+    super();
   }
 
   add() {
-    this.result = {name: this.name, color: this.color, username: this.username, password: this.password};
+    this.result = { name: this.name, color: this.color, username: this.username, password: this.password };
     this.close();
   }
 }

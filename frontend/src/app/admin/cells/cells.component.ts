@@ -1,10 +1,10 @@
 import { AddCellComponent } from './../add-cell/add-cell.component';
-import { MessageComponent } from '../../message/message.component';
-import { ConfirmComponent } from './../confirm/confirm.component';
-import { DialogService } from 'ng2-bootstrap-modal';
-import { TeamsService } from '../../teams.service';
 import { CellsService } from '../../cells.service';
 import { Component, OnInit } from '@angular/core';
+import { ConfirmComponent } from './../confirm/confirm.component';
+import { MessageComponent } from '../../message/message.component';
+import { SimpleModalService } from 'ngx-simple-modal';
+import { TeamsService } from '../../teams.service';
 
 @Component({
   selector: 'app-cells',
@@ -17,7 +17,7 @@ export class CellsComponent implements OnInit {
 
   constructor(private cellsService: CellsService,
     private teamsService: TeamsService,
-    private dialogService: DialogService) { }
+    private simpleModalService: SimpleModalService) { }
 
   ngOnInit() {
     this.teamsService.getAllTeams().subscribe(teams => {
@@ -37,22 +37,22 @@ export class CellsComponent implements OnInit {
     this.cellsService.updateCell(cell).subscribe(resp => {
       if (resp.message) {
         // Popup with message
-        const messagePopup = this.dialogService.addDialog(MessageComponent, {
+        const messagePopup = this.simpleModalService.addModal(MessageComponent, {
           title: 'Message',
           message: resp.message
         }).subscribe();
 
-        setTimeout( () => {
+        setTimeout(() => {
           messagePopup.unsubscribe();
         }, 10000);
       } else if (resp.errmsg) {
         // Popup with errmsg
-        const messagePopup = this.dialogService.addDialog(MessageComponent, {
+        const messagePopup = this.simpleModalService.addModal(MessageComponent, {
           title: resp.name,
           message: resp.errmsg
         }).subscribe();
 
-        setTimeout( () => {
+        setTimeout(() => {
           messagePopup.unsubscribe();
         }, 10000);
       }
@@ -60,64 +60,64 @@ export class CellsComponent implements OnInit {
   }
 
   addCell() {
-    const addCellPopup = this.dialogService.addDialog(AddCellComponent, {cells: this.cells, teams: this.teams})
-    .subscribe(answer => {
-      if (answer.name !== '' && answer.owner !== '') {
-        this.cellsService.addCell(answer).subscribe(resp => {
-          if (resp.message) {
-            // popup with message
-            const messagePopup = this.dialogService.addDialog(MessageComponent, {
-              title: 'Message',
-              message: resp.message
-            }).subscribe();
+    const addCellPopup = this.simpleModalService.addModal(AddCellComponent, { cells: this.cells, teams: this.teams })
+      .subscribe(answer => {
+        if (answer.name !== '' && answer.owner !== '') {
+          this.cellsService.addCell(answer).subscribe(resp => {
+            if (resp.message) {
+              // popup with message
+              const messagePopup = this.simpleModalService.addModal(MessageComponent, {
+                title: 'Message',
+                message: resp.message
+              }).subscribe();
 
-            setTimeout( () => {
-              messagePopup.unsubscribe();
-            }, 10000);
-          } else if (resp.errmsg) {
-            // Popup with errmsg
-            const messagePopup = this.dialogService.addDialog(MessageComponent, {
-              title: resp.name,
-              message: resp.errmsg
-            }).subscribe();
+              setTimeout(() => {
+                messagePopup.unsubscribe();
+              }, 10000);
+            } else if (resp.errmsg) {
+              // Popup with errmsg
+              const messagePopup = this.simpleModalService.addModal(MessageComponent, {
+                title: resp.name,
+                message: resp.errmsg
+              }).subscribe();
 
-            setTimeout( () => {
-              messagePopup.unsubscribe();
-            }, 10000);
-          }
-        });
+              setTimeout(() => {
+                messagePopup.unsubscribe();
+              }, 10000);
+            }
+          });
 
-        this.updateList();
-      }
-    });
+          this.updateList();
+        }
+      });
 
   }
   deleteCell(cell) {
-    const confirmPopup = this.dialogService.addDialog(ConfirmComponent, {
+    const confirmPopup = this.simpleModalService.addModal(ConfirmComponent, {
       title: 'Confirm delete',
       message: 'Are you sure you want to delete this cell?'
-    }).subscribe( (isConfirmed) => {
+    }).subscribe((isConfirmed) => {
       if (isConfirmed) {
         // Confirmed is true, so do delete
         this.cellsService.deleteCell(cell).subscribe(resp => {
           if (resp.message) {
             // Popup with message
-            const messagePopup = this.dialogService.addDialog(MessageComponent, {
+            const messagePopup = this.simpleModalService.addModal(MessageComponent, {
               title: 'Message',
               message: resp.message
             }).subscribe();
 
-            setTimeout( () => {
+            setTimeout(() => {
               messagePopup.unsubscribe();
             }, 10000);
           } else if (resp.errmsg) {
             // Popup with errmsg
-            const messagePopup = this.dialogService.addDialog(MessageComponent, {
+            const messagePopup = this.simpleModalService.addModal(MessageComponent, {
               title: resp.name,
               message: resp.errmsg
             }).subscribe();
 
-            setTimeout( () => {
+            setTimeout(() => {
               messagePopup.unsubscribe();
             }, 10000);
           }
@@ -131,7 +131,7 @@ export class CellsComponent implements OnInit {
       }
     });
 
-    setTimeout( () => {
+    setTimeout(() => {
       confirmPopup.unsubscribe();
     }, 10000);
   }

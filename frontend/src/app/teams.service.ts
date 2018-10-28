@@ -15,10 +15,12 @@ export class TeamsService {
     return this.http.get('/api/teams/' + id)
       .map(res => res.json());
   }
+
   addTeam(team) {
     return this.http.put('/api/teams', team)
       .map(res => res.json());
   }
+
   updateTeam(team) {
     return this.http.put('/api/teams/' + team._id, team)
       .map(res => res.json());

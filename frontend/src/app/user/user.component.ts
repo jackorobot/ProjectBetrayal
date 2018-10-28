@@ -1,9 +1,9 @@
-import { MessageComponent } from './../message/message.component';
-import { DialogService } from 'ng2-bootstrap-modal';
-import { TeamsService } from './../teams.service';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { CellsService } from './../cells.service';
+import { Component, OnInit } from '@angular/core';
+import { MessageComponent } from './../message/message.component';
+import { Router } from '@angular/router';
+import { SimpleModalService } from 'ngx-simple-modal';
+import { TeamsService } from './../teams.service';
 
 @Component({
   selector: 'app-user',
@@ -18,7 +18,7 @@ export class UserComponent implements OnInit {
   teams: any = [];
   cells: any = [];
 
-  constructor(private dialogService: DialogService,
+  constructor(private simpleModalService: SimpleModalService,
     private cellsService: CellsService,
     private teamsService: TeamsService,
     private router: Router) { }
@@ -40,7 +40,7 @@ export class UserComponent implements OnInit {
   updateAction(cell) {
     if (cell._id === cell.target._id) {
       cell.actionType = 'defend';
-    }else{
+    } else {
       this.cells.forEach(element => {
         if (element._id === cell.target._id && element.owner === cell.owner._id) {
           cell.actionType = 'defend';
@@ -54,9 +54,9 @@ export class UserComponent implements OnInit {
           cell.team = element.owner;
         }
       });
-    }else if (cell.actionType === 'attack') {
+    } else if (cell.actionType === 'attack') {
       this.cells.forEach(element => {
-        if (element._id === cell.target._id && element.owner === cell.team){
+        if (element._id === cell.target._id && element.owner === cell.team) {
           cell.team = cell.owner;
         }
       });
@@ -65,12 +65,12 @@ export class UserComponent implements OnInit {
     this.cellsService.updateCell(cell).subscribe(resp => {
       if (resp.errmsg) {
         // Popup with errmsg
-        const messagePopup = this.dialogService.addDialog(MessageComponent, {
+        const messagePopup = this.simpleModalService.addModal(MessageComponent, {
           title: resp.name,
           message: resp.errmsg
         }).subscribe();
 
-        setTimeout( () => {
+        setTimeout(() => {
           messagePopup.unsubscribe();
         }, 10000);
       }
@@ -99,7 +99,7 @@ export class UserComponent implements OnInit {
 
   helpBtn() {
     // Popup with message
-    const messagePopup = this.dialogService.addDialog(MessageComponent, {
+    const messagePopup = this.simpleModalService.addModal(MessageComponent, {
       title: 'Help',
       message: 'Het doel van dit spel is om de meeste cellen in bezit te hebben.\
                 Dit doe je door zo veel mogelijk cellen over te nemen van je tegenstanders.\

@@ -1,5 +1,5 @@
-import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Component } from '@angular/core';
+import { SimpleModalComponent } from 'ngx-simple-modal';
 
 export interface AddActionModel {
   cells: any;
@@ -11,9 +11,10 @@ export interface AddActionModel {
   templateUrl: './add-action.component.html',
   styleUrls: ['./add-action.component.css']
 })
+
 export class AddActionComponent
-       extends DialogComponent<AddActionModel, {origin: string, target: string, actionType: string, team: string}>
-       implements AddActionModel {
+  extends SimpleModalComponent<AddActionModel, { origin: string, target: string, actionType: string, team: string }>
+  implements AddActionModel {
 
   origin: string;
   target: string;
@@ -23,8 +24,8 @@ export class AddActionComponent
   cells: any;
   teams: any;
 
-  constructor(dialogService: DialogService) {
-    super(dialogService);
+  constructor() {
+    super();
   }
 
   add() {

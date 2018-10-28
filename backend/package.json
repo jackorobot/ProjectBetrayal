@@ -8,10 +8,10 @@
   },
   "private": true,
   "dependencies": {
-    "bluebird": "3.5.0",
+    "bluebird": "^3.5.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mongoose": "^4.13.17",
+    "mongoose": "^5.3.7",
     "q": "1.5.1"
   }
 }
