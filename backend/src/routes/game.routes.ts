@@ -1,20 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const async = require('async');
-
-const Voronoi = require('../libraries/voronoi');
-
-var mongoose = require('mongoose');
-var Cell = require('../models/cell.model');
-var Team = require('../models/team.model');
+import { Cell } from '../models/cell.model';
+import { parallel } from 'async';
+import { Response } from 'express';
+import { Router } from 'express';
+import { Team } from '../models/team.model';
+import { Voronoi } from '../lib/voronoi';
 
 var gameState = 0; // 0 == stop, 1 == go
 var timeStamp = 0;
 var winner = '';
 var interval = 300000;
-var gameTimer;
+var gameTimer: NodeJS.Timeout;
 
-function rndf(min, max) {
+function rndf(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
 
@@ -32,11 +29,11 @@ function gameHandler() {
   }
 }
 
-function startGame(res) {
+function startGame(res: Response) {
   // Start the game by resetting the gamestate
   gameState = 1
   winner = '';
-  async.parallel([generateGame], function (err) {
+  parallel([generateGame], (err) => {
     if (err)
       return res.send(err);
   });
@@ -51,7 +48,7 @@ function stopGame() {
   gameState = 0;
 }
 
-function setTimer(seconds) {
+function setTimer(seconds: number) {
   interval = seconds;
   if (gameState) {
     clearTimeout(gameTimer);
@@ -64,7 +61,7 @@ function setTimeStamp() {
   timeStamp = new Date().getTime() + interval + 2000;
 }
 
-function generateGame(cb) {
+function generateGame(cb: (err: any) => void) {
   Cell.deleteMany({}, function (err) {
     if (err) return cb(err);
 
@@ -187,13 +184,13 @@ function generateGame(cb) {
 }
 
 function newRound() {
-  Cell.find({}, (err, cells) => {
+  Cell.find({}, (_err, cells) => {
     cells.forEach(function (cell) {
       cell.target = cell._id;
       cell.actionType = 'defend';
       cell.team = cell.owner;
 
-      cell.save(function (err, cell) {
+      cell.save(function (err, _cell) {
         if (err) return err;
       });
     });
@@ -268,7 +265,7 @@ function executeRound(res) {
       }
     }
 
-    async.parallel(calls, function (err, result) {
+    async.parallel(calls, function (err, _result) {
       if (err) {
         if (res) {
           return res.send(err);
@@ -285,43 +282,43 @@ function executeRound(res) {
   });
 }
 
-router.route('/executeround')
+export const gameRouter = Router();
+
+gameRouter.route('/executeround')
   // Run the current round
-  .get((req, res) => {
+  .get((_req, res) => {
     executeRound(res);
   });
 
-router.route('/setroundtime')
+gameRouter.route('/setroundtime')
   // Set the roundTime interval, return the timestamp
   .put((req, res) => {
     setTimer(req.body.interval);
     res.json({ timestamp: timeStamp });
   });
 
-router.route('/getstate')
+gameRouter.route('/getstate')
   // Return the gamestate, and timestamp
-  .get((req, res) => {
+  .get((_req, res) => {
     res.json({ gamestate: gameState, timestamp: timeStamp, interval: interval, winner: winner });
   });
 
-router.route('/stop')
+gameRouter.route('/stop')
   // Stop the game from running
-  .get((req, res) => {
+  .get((_req, res) => {
     stopGame();
     res.json({ message: 'Game stopped', gamestate: gameState })
   });
 
-router.route('/start')
+gameRouter.route('/start')
   // Start the game
   .put((req, res) => {
     setTimer(req.body.interval);
     startGame(res);
   });
 
-router.route('/winner/:id')
+gameRouter.route('/winner/:id')
   // Declare the winner
-  .get((req, res) => {
+  .get((req, _res) => {
     winner = req.params.id;
   });
-
-module.exports = router;
