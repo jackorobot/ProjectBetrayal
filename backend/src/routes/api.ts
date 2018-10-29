@@ -4,13 +4,13 @@ import { gameRouter } from './game.routes';
 import { Router } from 'express';
 import { teamRouter } from './team.routes';
 
-export const router = Router();
+export const apiRouter = Router();
 
-router.get('/', (_req, res) => {
+apiRouter.get('/', (_req, res) => {
   res.send('{ "message": "API works" }');
 });
-router.use('/teams', teamRouter);
-router.use('/cells', cellRouter);
-router.use('/authenticate', authenticateRouter);
-router.use('/game', gameRouter);
+apiRouter.use('/teams', teamRouter);
+apiRouter.use('/cells', cellRouter);
+apiRouter.use('/authenticate', authenticateRouter);
+apiRouter.use('/game', gameRouter);
 
